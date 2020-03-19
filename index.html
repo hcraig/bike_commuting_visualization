@@ -1,0 +1,811 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <title>BIKE COMMUTING SLOPECHART</title>
+   	<script src="https://d3js.org/d3.v4.min.js"></script>
+   	<link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600" rel="stylesheet">
+ 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
+ 	<script src="https://code.jquery.com/jquery-2.2.4.js" integrity="sha256-iT6Q9iMJYuQiMWNd9lDyBUStIq/8PuOW33aOqmvFpqI="crossorigin="anonymous"></script>
+    <style>
+ 
+ 	.col-centered{
+   	 	float: none;
+   		margin: 0 auto;
+	}
+	
+	#main {
+		margin-left:0px;
+		margin-top: -75px;
+	}
+
+	#slopechart {
+		margin-left:0;
+		margin-right:0%;
+	}
+
+	svg {
+		margin-left:5%;
+	}
+
+	hr {
+    	border: 0;
+    	border-top: 1px solid gray;
+    	width:100%;
+	}
+
+	.button {
+ 		color: #366b69; 
+ 		border: 2px solid gray;
+  		border-radius: 6px; 
+  		background:transparent;
+  		width:120px;
+  		height:40px;
+  		font-size:18px;
+  	}
+
+   .button:hover {
+      background-color: gray;
+      color: white;
+ 	}
+
+	.text {
+  		font-size: 35px;
+	}
+
+	.text2 {
+  		font-size: 56px;
+	}
+	
+	h1 {
+		font-family: 'Open Sans', sans-serif;
+		color:#353536;
+		padding-top:80px;
+		text-align:center;
+	}
+
+	body {
+		background-color:#f2f2f2;
+	}
+			
+	p {
+		font-family: 'Open Sans', sans-serif;
+		color:#353536;
+	}
+			
+	p#second {
+		font-family: 'Open Sans', sans-serif;
+		font-size:14px;
+		margin: 0;
+		line-height: 0px;
+		font-weight:300;
+		color:#353536;
+	}
+		
+	p#third {
+		font-family: 'Open Sans', sans-serif;
+		font-size:11px;
+		color:#353536;
+		padding-top:2px;
+	}
+			
+	#tooltip.hidden {
+		display: none;
+		z-index:20;	
+	}
+	
+	#tooltip {
+		position: absolute;
+		width: 170px;
+		height: 70px;
+		padding: 5px;
+		background-color: white;
+		border: solid 1px gray;
+		pointer-events: none; 
+		z-index:20;				
+	}
+	
+	#tooltip:after {
+    	content:'';
+   		display: block;
+    	position: absolute;
+    	top: 86.5%;
+   	 	left: 50%;
+    	margin-left: -10px;
+    	width: 20px;
+    	height: 20px;
+   		background: #FFFFFF;
+    	border-left: solid 1px gray;
+    	border-bottom: solid 1px gray;
+    	-moz-transform:rotate(-45deg);
+ 		-webkit-transform:rotate(-45deg);
+ 		pointer-events: none; 
+ 		z-index:-50;
+	}	
+	
+	#yeartext {
+		margin-left:50px;
+		margin-top:138px;
+		position:absolute;
+	}
+	
+	#yeartext2 {
+		margin-left:50px;
+		margin-top:308px;
+		position:absolute;
+	}
+	
+	#introtext0 {
+		margin-top:20px;
+		position:absolute;		
+		margin-left:150px;
+		margin-right:150px;
+		width:900px;
+		text-align:center;
+	}
+						
+	#introtext2 {
+		margin-top:1500px;
+		position:absolute;
+		margin-left:150px;
+		margin-right:150px;
+		width:900px;
+		text-align:center;
+	}
+			
+	#introtext3 {
+		margin-top:2250px;
+		position:absolute;
+		margin-left:150px;
+		margin-right:150px;
+		width:900px;
+		text-align:center;
+	}
+
+	#firstyear {
+		width:230px;
+		
+		margin-left:40%;
+		margin-right:40%;
+
+		margin-top:50px;
+	}
+			
+	#secondyear {
+		margin-left:575px;
+		margin-top:100px;
+		position:absolute;			
+	}
+			
+	.l {
+		font-size:17px; 
+		font-weight:500;
+		padding-left:45px; 
+		padding-top:11px; 
+		margin:0px;
+		color:#066781;	
+	}
+			
+	.l2 {
+		font-size:20px; 
+		font-weight:300;	
+		margin-top:5px;
+		margin-bottom:5px;
+		margin-right:0%;
+		padding-top:-25px;
+		padding-bottom:-25px;
+		text-align:left;
+	}
+	
+	.l3 {
+		font-size:16px; 
+		font-weight:300;	
+		margin-top:5px;
+		margin-bottom:5px;
+		padding-top:-25px;
+		padding-bottom:-25px;
+		text-align:left;
+	}
+			
+	#titles {
+		position:absolute;
+	}
+			
+	#label1 {
+		margin-left:100px;
+		margin-top:430px;
+		position:absolute;
+		text-align:center;
+		font-size:15px; 
+	}
+			
+	#label2 {
+		margin-left:435px;
+		margin-top:430px;
+		position:absolute;
+		text-align:center;
+		font-size:15px; 
+	}
+			
+	#label3 {
+		margin-left:765px;
+		margin-top:430px;
+		position:absolute;
+		text-align:center;
+		font-size:15px; 
+	}
+
+	#description {
+		width:800px;
+		margin:auto;
+		text-align:center;
+	}
+
+	p {
+		font-family: 'Open Sans', sans-serif;
+		font-size: 12px;
+		font-weight:300;
+	}
+		
+	.linemarker {
+		font-family: 'Open Sans', sans-serif;
+		font-size: 14px;
+		font-weight:300;
+		color:gray;
+	}
+	
+	.yearmarker {
+		font-family: 'Open Sans', sans-serif;
+		font-size: 20px;
+		font-weight:300;
+		color:#066781;	
+	}
+	
+	.hovermarker {
+		font-family: 'Open Sans', sans-serif;
+		font-size: 20px;
+		font-weight:300;
+		color:#066781;	
+	}
+ 
+	p #second {
+		margin: 0;
+		font-family: 'Open Sans', sans-serif;
+		font-size: 12px;
+		line-height: 20px;
+		font-weight:400;
+		display:inline;
+	}
+	
+	.list {
+		text-align:left;
+		font-size:2.4vmin;
+		margin-top:16px;
+		margin-right:0px;
+		padding-right:0px;
+		padding-left:6%;
+	}
+			
+	.list:hover{
+		cursor: pointer;
+		text-decoration:underline;
+	}
+ 
+</style>
+
+</head>
+
+<body>
+
+<div id="test1111" class="container-fluid" style="margin-left:0px;">
+	<hr style="margin-bottom:5px; opacity:.4; width:60%;">
+	<p style="text-align:left; font-size:42px; line-height:60px; margin-right:20%; margin-left:20%; padding-bottom:0px; padding-left:0px; padding-top:4px;"><img class="img-responsive" src="biketire.png" style=" margin-top:-7px; margin-right:15px; width:40px; height:40px; "></img>BIKE COMMUTING TRENDS</p>		
+	<hr style="margin-top:-5px; margin-bottom:10px; opacity:.4; width:60%;">
+	<p style="text-align:left; font-size:18px; line-height:30px; margin-right:20%; margin-left:20%; margin-bottom:0px; padding-bottom:0px;"><!-- While bike commuting is on the rise across the United States, which cities have seen the greatest increase in bike commuting? Where has bike commuting actually decreased?  -->Explore the slopegraph below to view changes in bike commuting rates across the United States from 2005 to 2017 (data from the American Community survey). <em>Hover over lines for details on each city.</em></p>
+	<br>
+	<div class="text-center">
+		<p style="text-align:center; font-size:18px;">View shift from 2005 to:</p>	
+		<div class="btn-group btn-group-toggle" data-toggle="buttons">
+      		<label class="btn btn-secondary btn-sm active" id="p2007button">
+    			<input type="radio" name="options" id="p2007" autocomplete="off" onclick="highlight2007()" checked> 2007
+  			</label>
+			<label class="btn btn-secondary btn-sm" id="p2009button">
+    			<input type="radio" name="options" id="p2009" autocomplete="off" onclick="highlight2009()"> 2009
+  			</label>
+			<label class="btn btn-secondary btn-sm" id="p2011button">
+    			<input type="radio" name="options" id="p2011" autocomplete="off" onclick="highlight2011()"> 2011
+  			</label>
+			<label class="btn btn-secondary btn-sm" id="p2013button">
+    			<input type="radio" name="options" id="p2013" autocomplete="off" onclick="highlight2013()"> 2013
+    		</label>
+     		<label class="btn btn-secondary btn-sm" id="p2015button">
+    			<input type="radio" name="options" id="p2015" autocomplete="off" onclick="highlight2015()"> 2015
+  			</label>
+			<label class="btn btn-secondary btn-sm" id="p2017button">
+    			<input type="radio" name="options" id="p2017" autocomplete="off" onclick="highlight2017()"> 2017
+  			</label>
+		</div>
+	</div>
+</div>		
+<br>
+<div id="main">
+</div>
+<div id="tooltip" class="hidden">
+	<p><span id="value">100</span></p>
+</div>
+<br>
+
+<script type="text/javascript">
+
+var datayear = [[570, 170, 629, 350, 'Boulder', 'CO', '7.8', '8.9', '2007','2005'],[258, 170, 408, 350, 'Somerville', 'MA', '2', '4.8', '2007','2005'],[435, 170, 473, 350, 'Cambridge', 'MA', '5.3', '6', '2007','2005'],[349, 170, 527, 350, 'Berkeley', 'CA', '3.7', '7', '2007','2005'],[306, 170, 268, 350, 'Miami Beach', 'FL', '2.9', '2.2', '2007','2005'],[338, 170, 360, 350, 'Portland', 'OR', '3.5', '3.9', '2007','2005'],[301, 170, 317, 350, 'Mountain View', 'CA', '2.8', '3.1', '2007','2005'],[301, 170, 548, 350, 'Chico', 'CA', '2.8', '7.4', '2007','2005'],[360, 170, 435, 350, 'Fort Collins', 'CO', '3.9', '5.3', '2007','2005'],[312, 170, 290, 350, 'Ann Arbor', 'MI', '3', '2.6', '2007','2005'],[242, 170, 242, 350, 'Washington', 'DC', '1.7', '1.7', '2007','2005'],[344, 170, 392, 350, 'Gainesville', 'FL', '3.6', '4.5', '2007','2005'],[602, 170, 608, 350, 'Eugene', 'OR', '8.4', '8.5', '2007','2005'],[365, 170, 382, 350, 'Madison', 'WI', '4', '4.3', '2007','2005'],[349, 170, 355, 350, 'Santa Barbara', 'CA', '3.7', '3.8', '2007','2005'],[204, 170, 215, 350, 'Santa Monica', 'CA', '1', '1.2', '2007','2005'],[279, 170, 355, 350, 'Minneapolis', 'MN', '2.4', '3.8', '2007','2005'],[166, 170, 204, 350, 'Las Cruces', 'NM', '0.3', '1', '2007','2005'],[285, 170, 274, 350, 'New Haven', 'CT', '2.5', '2.3', '2007','2005'],[285, 170, 360, 350, 'Bellingham', 'WA', '2.5', '3.9', '2007','2005'],[225, 170, 204, 350, 'Redwood City', 'CA', '1.4', '1', '2007','2005'],[247, 170, 285, 350, 'San Francisco', 'CA', '1.8', '2.5', '2007','2005'],[473, 170, 204, 350, 'Bloomington', 'IN', '6', '1', '2007','2005'],[236, 170, 263, 350, 'Salt Lake City', 'UT', '1.6', '2.1', '2007','2005'],[317, 170, 301, 350, 'Tempe', 'AZ', '3.1', '2.8', '2007','2005'],[204, 170, 236, 350, 'New Orleans', 'LA', '1', '1.6', '2007','2005'],[338, 170, 306, 350, 'College Station', 'TX', '3.5', '2.9', '2007','2005'],[274, 170, 274, 350, 'Seattle', 'WA', '2.3', '2.3', '2007','2005'],[198, 170, 204, 350, 'Philadelphia', 'PA', '0.9', '1', '2007','2005'],[268, 170, 252, 350, 'Tucson', 'AZ', '2.2', '1.9', '2007','2005'],[150, 170, 851, 170], [150, 350, 851, 350], [150, 350, 150, 400], [850, 350, 850, 400], [500, 350, 500, 400]]
+		
+var svg2 = d3.select("div#main")
+	.append("svg")
+	.attr("id", "slopechart")
+	.attr("viewBox", "0 0 1000 500")
+  	.attr("preserveAspectRatio", "xMinYMid")
+	svg2.selectAll("line")
+	.data(datayear)
+	.enter()
+	.append("line")
+	.style("stroke-linecap", "butt")	   
+	.style("stroke-opacity", function(d) {
+		if (d[0] == 150 && d[2] == 851) { 
+			   return "1";
+			}
+		else return ".6";
+		})
+			 
+	.style("stroke", function(d) {
+		if (d[0] == 150 && d[2] == 851) { 
+			return "gray";
+			}
+		if (d[1] == 350 && d[3] == 400) {
+			return "black";
+			}
+		if (d[0] < d[2]) {
+			return "#366b69"
+			}
+		else return "#71411B";	
+			})			  
+	.style("stroke-dasharray", function(d) {
+		if (d[1] == 350 && d[3] == 400) {
+			   return "3,3";
+			}
+			}) 
+	.style("stroke-width", function(d) {
+		if (d[0] == 150 && d[2] == 851) { 
+			return "4px";
+			}
+		if (d[1] == 350 && d[3] == 400) {
+			return "1px";
+			}
+		else return "3px";	 		
+			})
+	.attr("x1", function(d) {
+		return d[2];
+			})
+	.attr("y1", function(d) {
+		return d[1];
+			})
+	.attr("x2", function(d) {
+		return d[0];
+			})
+	.attr("y2", function(d) {
+		return d[3];
+			})
+			      
+	.on("mouseover", function(d) {
+		if (d[0] != 150 && d[2] != 851 && d[3] != 400) {
+			svgDim = svg2.node().getBoundingClientRect();
+			var h = $('#test1111').height();
+			var xPosition = parseFloat(d3.select(this).attr("x1"));
+			var yPosition = parseFloat(d3.select(this).attr("y1"));	
+			var left = (xPosition * (svgDim.width / 1000)) - 85
+			var top = yPosition * (svgDim.height / 500) + h - 122
+			d3.select("#tooltip")
+			.style("left", left + "px")
+			.style("top", top + "px")
+			.select("#value")
+			.html("<p id=\"second\">" + d[4]  + ", " + d[5] + "</p2>" + "<br><p id=\"third\">" + d[9] + ": " + d[6] + "% bike commuters<br>" + d[8] + ": " + d[7] + "% bike commuters</p>")
+			d3.select(this).style("stroke", "gray")
+			d3.select("#tooltip").classed("hidden", false);
+		}})
+			
+	.on("mouseout", function(d) {
+		if (d[0] != 150 && d[3] != 850) {
+			d3.select("#tooltip").classed("hidden", true);
+			d3.select(this).style("stroke", function(d) {
+				if (d[0] < d[2]) {
+			   		return "#366b69"
+			   	}
+			   	else return "#71411B" 
+				})			
+				}})
+		
+	svg2.append("text")
+    .attr("x", 85)
+    .attr("y", 410)
+    .text("0% bike commuters")
+    .attr("class", "linemarker")
+    			
+    svg2.append("text")
+    .attr("x", 425)
+    .attr("y", 410)
+    .text("6.5% bike commuters")
+    .attr("class", "linemarker")
+    			
+    svg2.append("text")
+    .attr("x", 775)
+    .attr("y", 410)
+    .text("13% bike commuters")
+    .attr("class", "linemarker")
+   				
+   	svg2.append("text")
+    .attr("x", 95)
+    .attr("y", 175)
+    .text("2007")
+    .attr("class", "yearmarker key2007")
+    .attr("opacity", 1)
+    			
+    svg2.append("text")
+    .attr("x", 95)
+    .attr("y", 175)
+    .text("2009")
+    .attr("class", "yearmarker key2009")
+    .attr("opacity", 0)
+    			
+    svg2.append("text")
+    .attr("x", 95)
+    .attr("y", 175)
+    .text("2011")
+    .attr("class", "yearmarker key2011")
+    .attr("opacity", 0)
+    			
+    svg2.append("text")
+    .attr("x", 95)
+    .attr("y", 175)
+    .text("2013")
+    .attr("class", "yearmarker key2013")
+    .attr("opacity", 0)
+    			
+    svg2.append("text")
+    .attr("x", 95)
+    .attr("y", 175)
+    .text("2015")
+    .attr("class", "yearmarker key2015")
+    .attr("opacity", 0)
+    			
+    svg2.append("text")
+    .attr("x", 95)
+    .attr("y", 175)
+    .text("2017")
+    .attr("class", "yearmarker key2017")
+    .attr("opacity", 0)
+    			
+    svg2.append("text")
+    .attr("x", 95)
+    .attr("y", 355)
+    .text("2005")
+    .attr("class", "yearmarker")
+    			
+	d3.select("input#p2017")
+		.on("click", function () {
+		var datayear = [[570, 170, 726, 350, 'Boulder', 'CO', '7.8', '10.7', '2017','2005'],[258, 170, 635, 350, 'Somerville', 'MA', '2', '9', '2017','2005'],[435, 170, 592, 350, 'Cambridge', 'MA', '5.3', '8.2', '2017','2005'],[349, 170, 575, 350, 'Berkeley', 'CA', '3.7', '7.9', '2017','2005'],[306, 170, 500, 350, 'Miami Beach', 'FL', '2.9', '6.5', '2017','2005'],[338, 170, 489, 350, 'Portland', 'OR', '3.5', '6.3', '2017','2005'],[301, 170, 473, 350, 'Mountain View', 'CA', '2.8', '6', '2017','2005'],[301, 170, 446, 350, 'Chico', 'CA', '2.8', '5.5', '2017','2005'],[360, 170, 441, 350, 'Fort Collins', 'CO', '3.9', '5.4', '2017','2005'],[312, 170, 425, 350, 'Ann Arbor', 'MI', '3', '5.1', '2017','2005'],[242, 170, 419, 350, 'Washington', 'DC', '1.7', '5', '2017','2005'],[344, 170, 387, 350, 'Gainesville', 'FL', '3.6', '4.4', '2017','2005'],[602, 170, 387, 350, 'Eugene', 'OR', '8.4', '4.4', '2017','2005'],[365, 170, 371, 350, 'Madison', 'WI', '4', '4.1', '2017','2005'],[349, 170, 365, 350, 'Santa Barbara', 'CA', '3.7', '4', '2017','2005'],[204, 170, 360, 350, 'Santa Monica', 'CA', '1', '3.9', '2017','2005'],[279, 170, 360, 350, 'Minneapolis', 'MN', '2.4', '3.9', '2017','2005'],[166, 170, 349, 350, 'Las Cruces', 'NM', '0.3', '3.7', '2017','2005'],[285, 170, 338, 350, 'New Haven', 'CT', '2.5', '3.5', '2017','2005'],[285, 170, 328, 350, 'Bellingham', 'WA', '2.5', '3.3', '2017','2005'],[225, 170, 317, 350, 'Redwood City', 'CA', '1.4', '3.1', '2017','2005'],[247, 170, 317, 350, 'San Francisco', 'CA', '1.8', '3.1', '2017','2005'],[473, 170, 317, 350, 'Bloomington', 'IN', '6', '3.1', '2017','2005'],[236, 170, 312, 350, 'Salt Lake City', 'UT', '1.6', '3', '2017','2005'],[317, 170, 306, 350, 'Tempe', 'AZ', '3.1', '2.9', '2017','2005'],[204, 170, 306, 350, 'New Orleans', 'LA', '1', '2.9', '2017','2005'],[338, 170, 301, 350, 'College Station', 'TX', '3.5', '2.8', '2017','2005'],[274, 170, 301, 350, 'Seattle', 'WA', '2.3', '2.8', '2017','2005'],[198, 170, 290, 350, 'Philadelphia', 'PA', '0.9', '2.6', '2017','2005'],[268, 170, 285, 350, 'Tucson', 'AZ', '2.2', '2.5', '2017','2005'],[150, 170, 851, 170], [150, 350, 851, 350], [150, 350, 150, 400], [850, 350, 850, 400], [500, 350, 500, 400]]
+		svg2.selectAll("line")
+			.data(datayear)
+			.transition().duration(1000)	 
+			.style("stroke", function(d) {
+			   	if (d[0] == 150 && d[2] == 851) { 
+			   		return "gray";
+			   		}
+			   	if (d[1] == 350 && d[3] == 400) {
+			   		return "black";
+			   		}
+			   	if (d[0] < d[2]) {
+			   		return "#366b69"
+			   		}
+			   	else return "#71411B";	
+			   })
+			.attr("x1", function(d) {
+			   	return d[2];
+			   	})
+			.attr("y1", function(d) {
+			   	return d[1];
+			    })
+			.attr("x2", function(d) {
+			   	return d[0];
+			    })
+			.attr("y2", function(d) {
+			   	return d[3];
+			    })
+			})
+				
+	d3.select("input#p2015")
+		.on("click", function () {
+		var datayear = [[570, 170, 705, 350, 'Boulder', 'CO', '7.8', '10.3', '2015','2005'],[258, 170, 462, 350, 'Somerville', 'MA', '2', '5.8', '2015','2005'],[435, 170, 554, 350, 'Cambridge', 'MA', '5.3', '7.5', '2015','2005'],[349, 170, 548, 350, 'Berkeley', 'CA', '3.7', '7.4', '2015','2005'],[306, 170, 376, 350, 'Miami Beach', 'FL', '2.9', '4.2', '2015','2005'],[338, 170, 527, 350, 'Portland', 'OR', '3.5', '7', '2015','2005'],[301, 170, 538, 350, 'Mountain View', 'CA', '2.8', '7.2', '2015','2005'],[301, 170, 430, 350, 'Chico', 'CA', '2.8', '5.2', '2015','2005'],[360, 170, 538, 350, 'Fort Collins', 'CO', '3.9', '7.2', '2015','2005'],[312, 170, 328, 350, 'Ann Arbor', 'MI', '3', '3.3', '2015','2005'],[242, 170, 371, 350, 'Washington', 'DC', '1.7', '4.1', '2015','2005'],[344, 170, 338, 350, 'Gainesville', 'FL', '3.6', '3.5', '2015','2005'],[602, 170, 559, 350, 'Eugene', 'OR', '8.4', '7.6', '2015','2005'],[365, 170, 435, 350, 'Madison', 'WI', '4', '5.3', '2015','2005'],[349, 170, 338, 350, 'Santa Barbara', 'CA', '3.7', '3.5', '2015','2005'],[204, 170, 425, 350, 'Santa Monica', 'CA', '1', '5.1', '2015','2005'],[279, 170, 419, 350, 'Minneapolis', 'MN', '2.4', '5', '2015','2005'],[166, 170, 182, 350, 'Las Cruces', 'NM', '0.3', '0.6', '2015','2005'],[285, 170, 285, 350, 'New Haven', 'CT', '2.5', '2.5', '2015','2005'],[285, 170, 392, 350, 'Bellingham', 'WA', '2.5', '4.5', '2015','2005'],[225, 170, 258, 350, 'Redwood City', 'CA', '1.4', '2', '2015','2005'],[247, 170, 382, 350, 'San Francisco', 'CA', '1.8', '4.3', '2015','2005'],[473, 170, 263, 350, 'Bloomington', 'IN', '6', '2.1', '2015','2005'],[236, 170, 301, 350, 'Salt Lake City', 'UT', '1.6', '2.8', '2015','2005'],[317, 170, 387, 350, 'Tempe', 'AZ', '3.1', '4.4', '2015','2005'],[204, 170, 328, 350, 'New Orleans', 'LA', '1', '3.3', '2015','2005'],[338, 170, 236, 350, 'College Station', 'TX', '3.5', '1.6', '2015','2005'],[274, 170, 365, 350, 'Seattle', 'WA', '2.3', '4', '2015','2005'],[198, 170, 268, 350, 'Philadelphia', 'PA', '0.9', '2.2', '2015','2005'],[268, 170, 279, 350, 'Tucson', 'AZ', '2.2', '2.4', '2015','2005'],[150, 170, 851, 170], [150, 350, 851, 350], [150, 350, 150, 400], [850, 350, 850, 400], [500, 350, 500, 400]]	
+		svg2.selectAll("line")
+			.data(datayear)
+			.transition().duration(1000)	 
+			.style("stroke", function(d) {
+			   	if (d[0] == 150 && d[2] == 851) { 
+			   		return "gray";
+			   		}
+			   	if (d[1] == 350 && d[3] == 400) {
+			   		return "black";
+			   		}
+			   	if (d[0] < d[2]) {
+			   		return "#366b69"
+			   		}
+			   	else return "#71411B";	
+			   })
+			.attr("x1", function(d) {
+			   	return d[2];
+			   	 })
+			.attr("y1", function(d) {
+			   	return d[1];
+			    })
+			.attr("x2", function(d) {
+			   	return d[0];
+			    })
+			.attr("y2", function(d) {
+			   	return d[3];
+			    })  
+			})
+				
+	d3.select("input#p2013")
+		.on("click", function () {
+		var datayear = [[570, 170, 748, 350, 'Boulder', 'CO', '7.8', '11.1', '2013','2005'],[258, 170, 570, 350, 'Somerville', 'MA', '2', '7.8', '2013','2005'],[435, 170, 500, 350, 'Cambridge', 'MA', '5.3', '6.5', '2013','2005'],[349, 170, 602, 350, 'Berkeley', 'CA', '3.7', '8.4', '2013','2005'],[306, 170, 435, 350, 'Miami Beach', 'FL', '2.9', '5.3', '2013','2005'],[338, 170, 468, 350, 'Portland', 'OR', '3.5', '5.9', '2013','2005'],[301, 170, 559, 350, 'Mountain View', 'CA', '2.8', '7.6', '2013','2005'],[301, 170, 425, 350, 'Chico', 'CA', '2.8', '5.1', '2013','2005'],[360, 170, 548, 350, 'Fort Collins', 'CO', '3.9', '7.4', '2013','2005'],[312, 170, 446, 350, 'Ann Arbor', 'MI', '3', '5.5', '2013','2005'],[242, 170, 392, 350, 'Washington', 'DC', '1.7', '4.5', '2013','2005'],[344, 170, 505, 350, 'Gainesville', 'FL', '3.6', '6.6', '2013','2005'],[602, 170, 559, 350, 'Eugene', 'OR', '8.4', '7.6', '2013','2005'],[365, 170, 408, 350, 'Madison', 'WI', '4', '4.8', '2013','2005'],[349, 170, 403, 350, 'Santa Barbara', 'CA', '3.7', '4.7', '2013','2005'],[204, 170, 349, 350, 'Santa Monica', 'CA', '1', '3.7', '2013','2005'],[279, 170, 349, 350, 'Minneapolis', 'MN', '2.4', '3.7', '2013','2005'],[166, 170, 188, 350, 'Las Cruces', 'NM', '0.3', '0.7', '2013','2005'],[285, 170, 295, 350, 'New Haven', 'CT', '2.5', '2.7', '2013','2005'],[285, 170, 285, 350, 'Bellingham', 'WA', '2.5', '2.5', '2013','2005'],[225, 170, 242, 350, 'Redwood City', 'CA', '1.4', '1.7', '2013','2005'],[247, 170, 355, 350, 'San Francisco', 'CA', '1.8', '3.8', '2013','2005'],[473, 170, 430, 350, 'Bloomington', 'IN', '6', '5.2', '2013','2005'],[236, 170, 306, 350, 'Salt Lake City', 'UT', '1.6', '2.9', '2013','2005'],[317, 170, 360, 350, 'Tempe', 'AZ', '3.1', '3.9', '2013','2005'],[204, 170, 344, 350, 'New Orleans', 'LA', '1', '3.6', '2013','2005'],[338, 170, 161, 350, 'College Station', 'TX', '3.5', '0.2', '2013','2005'],[274, 170, 338, 350, 'Seattle', 'WA', '2.3', '3.5', '2013','2005'],[198, 170, 274, 350, 'Philadelphia', 'PA', '0.9', '2.3', '2013','2005'],[268, 170, 333, 350, 'Tucson', 'AZ', '2.2', '3.4', '2013','2005'],[150, 170, 851, 170], [150, 350, 851, 350], [150, 350, 150, 400], [850, 350, 850, 400], [500, 350, 500, 400]]
+		svg2.selectAll("line")
+			.data(datayear)
+			.transition().duration(1000)	 
+			.style("stroke", function(d) {
+			   	if (d[0] == 150 && d[2] == 851) { 
+			   		return "gray";
+			   		}
+			   	if (d[1] == 350 && d[3] == 400) {
+			   		return "black";
+			   		}
+			   	if (d[0] < d[2]) {
+			   		return "#366b69"
+			   		}
+			   	else return "#71411B";	
+			   })
+			.attr("x1", function(d) {
+			   	return d[2];
+			   	})
+			.attr("y1", function(d) {
+			   	return d[1];
+			    })
+			.attr("x2", function(d) {
+			   	return d[0];
+			    })
+			.attr("y2", function(d) {
+			   	return d[3];
+			    }) 
+			});
+
+	d3.select("input#p2011")
+		.on("click", function () {
+		var datayear = [[570, 170, 667, 350, 'Boulder', 'CO', '7.8', '9.6', '2011','2005'],[258, 170, 365, 350, 'Somerville', 'MA', '2', '4', '2011','2005'],[435, 170, 457, 350, 'Cambridge', 'MA', '5.3', '5.7', '2011','2005'],[349, 170, 624, 350, 'Berkeley', 'CA', '3.7', '8.8', '2011','2005'],[306, 170, 489, 350, 'Miami Beach', 'FL', '2.9', '6.3', '2011','2005'],[338, 170, 489, 350, 'Portland', 'OR', '3.5', '6.3', '2011','2005'],[301, 170, 484, 350, 'Mountain View', 'CA', '2.8', '6.2', '2011','2005'],[301, 170, 495, 350, 'Chico', 'CA', '2.8', '6.4', '2011','2005'],[360, 170, 505, 350, 'Fort Collins', 'CO', '3.9', '6.6', '2011','2005'],[312, 170, 414, 350, 'Ann Arbor', 'MI', '3', '4.9', '2011','2005'],[242, 170, 322, 350, 'Washington', 'DC', '1.7', '3.2', '2011','2005'],[344, 170, 484, 350, 'Gainesville', 'FL', '3.6', '6.2', '2011','2005'],[602, 170, 543, 350, 'Eugene', 'OR', '8.4', '7.3', '2011','2005'],[365, 170, 403, 350, 'Madison', 'WI', '4', '4.7', '2011','2005'],[349, 170, 505, 350, 'Santa Barbara', 'CA', '3.7', '6.6', '2011','2005'],[204, 170, 301, 350, 'Santa Monica', 'CA', '1', '2.8', '2011','2005'],[279, 170, 333, 350, 'Minneapolis', 'MN', '2.4', '3.4', '2011','2005'],[166, 170, 215, 350, 'Las Cruces', 'NM', '0.3', '1.2', '2011','2005'],[285, 170, 295, 350, 'New Haven', 'CT', '2.5', '2.7', '2011','2005'],[285, 170, 365, 350, 'Bellingham', 'WA', '2.5', '4', '2011','2005'],[225, 170, 172, 350, 'Redwood City', 'CA', '1.4', '0.4', '2011','2005'],[247, 170, 333, 350, 'San Francisco', 'CA', '1.8', '3.4', '2011','2005'],[473, 170, 430, 350, 'Bloomington', 'IN', '6', '5.2', '2011','2005'],[236, 170, 274, 350, 'Salt Lake City', 'UT', '1.6', '2.3', '2011','2005'],[317, 170, 376, 350, 'Tempe', 'AZ', '3.1', '4.2', '2011','2005'],[204, 170, 274, 350, 'New Orleans', 'LA', '1', '2.3', '2011','2005'],[338, 170, 263, 350, 'College Station', 'TX', '3.5', '2.1', '2011','2005'],[274, 170, 338, 350, 'Seattle', 'WA', '2.3', '3.5', '2011','2005'],[198, 170, 247, 350, 'Philadelphia', 'PA', '0.9', '1.8', '2011','2005'],[268, 170, 301, 350, 'Tucson', 'AZ', '2.2', '2.8', '2011','2005'],[150, 170, 851, 170], [150, 350, 851, 350], [150, 350, 150, 400], [850, 350, 850, 400], [500, 350, 500, 400]]	
+		svg2.selectAll("line")
+			.data(datayear)
+			.transition().duration(1000)	 
+			.style("stroke", function(d) {
+			   	if (d[0] == 150 && d[2] == 851) { 
+			   		return "gray";
+			   		}
+			   	if (d[1] == 350 && d[3] == 400) {
+			   		return "black";
+			   		}
+			   	if (d[0] < d[2]) {
+			   		return "#366b69"
+			   		}
+			   	else return "#71411B";	
+			   		})
+			.attr("x1", function(d) {
+			   	return d[2];
+			   	})
+			.attr("y1", function(d) {
+			   	return d[1];
+			    })
+			.attr("x2", function(d) {
+			   	return d[0];
+			    })
+			.attr("y2", function(d) {
+			   	return d[3];
+			    })  
+			});
+
+	d3.select("input#p2009")
+		.on("click", function () {
+		var datayear = [[570, 170, 812, 350, 'Boulder', 'CO', '7.8', '12.3', '2009','2005'],[258, 170, 419, 350, 'Somerville', 'MA', '2', '5', '2009','2005'],[435, 170, 608, 350, 'Cambridge', 'MA', '5.3', '8.5', '2009','2005'],[349, 170, 629, 350, 'Berkeley', 'CA', '3.7', '8.9', '2009','2005'],[306, 170, 349, 350, 'Miami Beach', 'FL', '2.9', '3.7', '2009','2005'],[338, 170, 462, 350, 'Portland', 'OR', '3.5', '5.8', '2009','2005'],[301, 170, 274, 350, 'Mountain View', 'CA', '2.8', '2.3', '2009','2005'],[301, 170, 457, 350, 'Chico', 'CA', '2.8', '5.7', '2009','2005'],[360, 170, 683, 350, 'Fort Collins', 'CO', '3.9', '9.9', '2009','2005'],[312, 170, 312, 350, 'Ann Arbor', 'MI', '3', '3', '2009','2005'],[242, 170, 268, 350, 'Washington', 'DC', '1.7', '2.2', '2009','2005'],[344, 170, 489, 350, 'Gainesville', 'FL', '3.6', '6.3', '2009','2005'],[602, 170, 732, 350, 'Eugene', 'OR', '8.4', '10.8', '2009','2005'],[365, 170, 419, 350, 'Madison', 'WI', '4', '5', '2009','2005'],[349, 170, 338, 350, 'Santa Barbara', 'CA', '3.7', '3.5', '2009','2005'],[204, 170, 333, 350, 'Santa Monica', 'CA', '1', '3.4', '2009','2005'],[279, 170, 360, 350, 'Minneapolis', 'MN', '2.4', '3.9', '2009','2005'],[166, 170, 236, 350, 'Las Cruces', 'NM', '0.3', '1.6', '2009','2005'],[285, 170, 317, 350, 'New Haven', 'CT', '2.5', '3.1', '2009','2005'],[285, 170, 430, 350, 'Bellingham', 'WA', '2.5', '5.2', '2009','2005'],[225, 170, 215, 350, 'Redwood City', 'CA', '1.4', '1.2', '2009','2005'],[247, 170, 312, 350, 'San Francisco', 'CA', '1.8', '3', '2009','2005'],[473, 170, 328, 350, 'Bloomington', 'IN', '6', '3.3', '2009','2005'],[236, 170, 290, 350, 'Salt Lake City', 'UT', '1.6', '2.6', '2009','2005'],[317, 170, 349, 350, 'Tempe', 'AZ', '3.1', '3.7', '2009','2005'],[204, 170, 285, 350, 'New Orleans', 'LA', '1', '2.5', '2009','2005'],[338, 170, 263, 350, 'College Station', 'TX', '3.5', '2.1', '2009','2005'],[274, 170, 312, 350, 'Seattle', 'WA', '2.3', '3', '2009','2005'],[198, 170, 268, 350, 'Philadelphia', 'PA', '0.9', '2.2', '2009','2005'],[268, 170, 252, 350, 'Tucson', 'AZ', '2.2', '1.9', '2009','2005'],[150, 170, 851, 170], [150, 350, 851, 350], [150, 350, 150, 400], [850, 350, 850, 400], [500, 350, 500, 400]]	
+		svg2.selectAll("line")
+			.data(datayear)
+			.transition().duration(1000)	 
+			.style("stroke", function(d) {
+			   	if (d[0] == 150 && d[2] == 851) { 
+			   		return "gray";
+			   		}
+			   	if (d[1] == 350 && d[3] == 400) {
+			   		return "black";
+			   		}
+			   	if (d[0] < d[2]) {
+			   		return "#366b69"
+			   		}
+			   	else return "#71411B";	
+			   })
+			.attr("x1", function(d) {
+			   	return d[2];
+			   	})
+			.attr("y1", function(d) {
+			   	return d[1];
+			    })
+			.attr("x2", function(d) {
+			   	return d[0];
+			    })
+			.attr("y2", function(d) {
+			   	return d[3];
+			    })
+			});
+
+	d3.select("input#p2007")
+		.on("click", function () {
+		var datayear = [[570, 170, 629, 350, 'Boulder', 'CO', '7.8', '8.9', '2007','2005'],[258, 170, 408, 350, 'Somerville', 'MA', '2', '4.8', '2007','2005'],[435, 170, 473, 350, 'Cambridge', 'MA', '5.3', '6', '2007','2005'],[349, 170, 527, 350, 'Berkeley', 'CA', '3.7', '7', '2007','2005'],[306, 170, 268, 350, 'Miami Beach', 'FL', '2.9', '2.2', '2007','2005'],[338, 170, 360, 350, 'Portland', 'OR', '3.5', '3.9', '2007','2005'],[301, 170, 317, 350, 'Mountain View', 'CA', '2.8', '3.1', '2007','2005'],[301, 170, 548, 350, 'Chico', 'CA', '2.8', '7.4', '2007','2005'],[360, 170, 435, 350, 'Fort Collins', 'CO', '3.9', '5.3', '2007','2005'],[312, 170, 290, 350, 'Ann Arbor', 'MI', '3', '2.6', '2007','2005'],[242, 170, 242, 350, 'Washington', 'DC', '1.7', '1.7', '2007','2005'],[344, 170, 392, 350, 'Gainesville', 'FL', '3.6', '4.5', '2007','2005'],[602, 170, 608, 350, 'Eugene', 'OR', '8.4', '8.5', '2007','2005'],[365, 170, 382, 350, 'Madison', 'WI', '4', '4.3', '2007','2005'],[349, 170, 355, 350, 'Santa Barbara', 'CA', '3.7', '3.8', '2007','2005'],[204, 170, 215, 350, 'Santa Monica', 'CA', '1', '1.2', '2007','2005'],[279, 170, 355, 350, 'Minneapolis', 'MN', '2.4', '3.8', '2007','2005'],[166, 170, 204, 350, 'Las Cruces', 'NM', '0.3', '1', '2007','2005'],[285, 170, 274, 350, 'New Haven', 'CT', '2.5', '2.3', '2007','2005'],[285, 170, 360, 350, 'Bellingham', 'WA', '2.5', '3.9', '2007','2005'],[225, 170, 204, 350, 'Redwood City', 'CA', '1.4', '1', '2007','2005'],[247, 170, 285, 350, 'San Francisco', 'CA', '1.8', '2.5', '2007','2005'],[473, 170, 204, 350, 'Bloomington', 'IN', '6', '1', '2007','2005'],[236, 170, 263, 350, 'Salt Lake City', 'UT', '1.6', '2.1', '2007','2005'],[317, 170, 301, 350, 'Tempe', 'AZ', '3.1', '2.8', '2007','2005'],[204, 170, 236, 350, 'New Orleans', 'LA', '1', '1.6', '2007','2005'],[338, 170, 306, 350, 'College Station', 'TX', '3.5', '2.9', '2007','2005'],[274, 170, 274, 350, 'Seattle', 'WA', '2.3', '2.3', '2007','2005'],[198, 170, 204, 350, 'Philadelphia', 'PA', '0.9', '1', '2007','2005'],[268, 170, 252, 350, 'Tucson', 'AZ', '2.2', '1.9', '2007','2005'],[150, 170, 851, 170], [150, 350, 851, 350], [150, 350, 150, 400], [850, 350, 850, 400], [500, 350, 500, 400]]	
+		svg2.selectAll("line")
+			.data(datayear)
+			.transition().duration(1000)	 
+			.style("stroke", function(d) {
+			   	if (d[0] == 150 && d[2] == 851) { 
+			   		return "gray";
+			   		}
+			   	if (d[1] == 350 && d[3] == 400) {
+			   		return "black";
+			   		}
+			   	if (d[0] < d[2]) {
+			   		return "#366b69"
+			   		}
+			   	else return "#71411B";	
+			   	})
+			.attr("x1", function(d) {
+			   	return d[2];
+			   	})
+			.attr("y1", function(d) {
+			   	return d[1];
+			    })
+			.attr("x2", function(d) {
+			   	return d[0];
+			    })
+			.attr("y2", function(d) {
+			   	return d[3];
+			    })	
+			});
+				
+function highlight2007() {
+	d3.selectAll('.key2007')
+		.style("opacity", 1);	
+	d3.selectAll('.key2009')
+		.style("opacity", 0);
+	d3.selectAll('.key2011')
+		.style("opacity", 0);
+	d3.selectAll('.key2013')
+		.style("opacity", 0);
+	d3.selectAll('.key2015')
+		.style("opacity", 0);
+	d3.selectAll('.key2017')
+		.style("opacity", 0);
+	document.getElementById('p2007button').classList.add('active');
+	document.getElementById('p2009button').classList.remove('active');
+	document.getElementById('p2011button').classList.remove('active');
+	document.getElementById('p2013button').classList.remove('active');
+	document.getElementById('p2015button').classList.remove('active');
+	document.getElementById('p2017button').classList.remove('active');	
+	}
+		
+function highlight2009() {
+	d3.selectAll('.key2007')
+		.style("opacity", 0);	
+	d3.selectAll('.key2009')
+		.style("opacity", 1);
+	d3.selectAll('.key2011')
+		.style("opacity", 0);
+	d3.selectAll('.key2013')
+		.style("opacity", 0);
+	d3.selectAll('.key2015')
+		.style("opacity", 0);
+	d3.selectAll('.key2017')
+		.style("opacity", 0);
+	document.getElementById('p2007button').classList.remove('active');
+	document.getElementById('p2009button').classList.add('active');
+	document.getElementById('p2011button').classList.remove('active');
+	document.getElementById('p2013button').classList.remove('active');
+	document.getElementById('p2015button').classList.remove('active');
+	document.getElementById('p2017button').classList.remove('active');	
+	}
+		
+function highlight2011() {
+	d3.selectAll('.key2007')
+		.style("opacity", 0);	
+	d3.selectAll('.key2009')
+		.style("opacity", 0);
+	d3.selectAll('.key2011')
+		.style("opacity", 1);
+	d3.selectAll('.key2013')
+		.style("opacity", 0);
+	d3.selectAll('.key2015')
+		.style("opacity", 0);
+	d3.selectAll('.key2017')
+		.style("opacity", 0);
+	document.getElementById('p2007button').classList.remove('active');
+	document.getElementById('p2009button').classList.remove('active');
+	document.getElementById('p2011button').classList.add('active');
+	document.getElementById('p2013button').classList.remove('active');
+	document.getElementById('p2015button').classList.remove('active');
+	document.getElementById('p2017button').classList.remove('active');	
+	}
+
+function highlight2013() {
+	d3.selectAll('.key2007')
+		.style("opacity", 0);	
+	d3.selectAll('.key2009')
+		.style("opacity", 0);
+	d3.selectAll('.key2011')
+		.style("opacity", 0);
+	d3.selectAll('.key2013')
+		.style("opacity", 1);
+	d3.selectAll('.key2015')
+		.style("opacity", 0);
+	d3.selectAll('.key2017')
+		.style("opacity", 0);
+	document.getElementById('p2007button').classList.remove('active');
+	document.getElementById('p2009button').classList.remove('active');
+	document.getElementById('p2011button').classList.remove('active');
+	document.getElementById('p2013button').classList.add('active');
+	document.getElementById('p2015button').classList.remove('active');
+	document.getElementById('p2017button').classList.remove('active');	
+	}
+
+function highlight2015() {
+	d3.selectAll('.key2007')
+		.style("opacity", 0);	
+	d3.selectAll('.key2009')
+		.style("opacity", 0);
+	d3.selectAll('.key2011')
+		.style("opacity", 0);
+	d3.selectAll('.key2013')
+		.style("opacity", 0);
+	d3.selectAll('.key2015')
+		.style("opacity", 1);
+	d3.selectAll('.key2017')
+		.style("opacity", 0);
+	document.getElementById('p2007button').classList.remove('active');
+	document.getElementById('p2009button').classList.remove('active');
+	document.getElementById('p2011button').classList.remove('active');
+	document.getElementById('p2013button').classList.remove('active');
+	document.getElementById('p2015button').classList.add('active');
+	document.getElementById('p2017button').classList.remove('active');	
+	}
+		
+function highlight2017() {
+	d3.selectAll('.key2007')
+		.style("opacity", 0);	
+	d3.selectAll('.key2009')
+		.style("opacity", 0);
+	d3.selectAll('.key2011')
+		.style("opacity", 0);
+	d3.selectAll('.key2013')
+		.style("opacity", 0);
+	d3.selectAll('.key2015')
+		.style("opacity", 0);
+	d3.selectAll('.key2017')
+		.style("opacity", 1);
+	document.getElementById('p2007button').classList.remove('active');
+	document.getElementById('p2009button').classList.remove('active');
+	document.getElementById('p2011button').classList.remove('active');
+	document.getElementById('p2013button').classList.remove('active');
+	document.getElementById('p2015button').classList.remove('active');
+	document.getElementById('p2017button').classList.add('active');	
+	}
+</script>
+</body>
+</html>
